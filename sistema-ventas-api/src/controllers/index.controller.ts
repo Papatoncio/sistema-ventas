@@ -1,9 +1,20 @@
 import { Request, Response } from "express";
+import prisma from "../database/database";
 
 class IndexController {
-  public index(req: Request, res: Response) {
+  public async index(req: Request, res: Response) {
     try {
-      return res.json({ message: "API Works" });
+      const usuarios = await prisma.usuario.findMany();
+      //return res.json({ message: "API Works" });
+      const newUser = await prisma.usuario.create({
+        data: {
+          nombre: "Juan Pablo",
+          apellidos: "Jiménez Jaime",
+          username: "jpjj123",
+          password: "linux",
+        },
+      });
+      return res.json(usuarios);
     } catch (error: any) {
       return res.status(500).json({ message: `Error: ${error}` });
     }
