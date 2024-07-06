@@ -1,16 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 import { Jwt } from "jsonwebtoken";
+import { utils } from "../utils/utils";
 
 export const jwtCheck = (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = <string>req.headers["auth"];
-    // TODO: Obtener información del token
-    // let payload =
+    //TODO: Obtener la información del token
+    let payload = utils.getPayload(token);
 
-    // TODO: refreshToken
+    //TODO: RefreshToken
+    const newToken = utils.generateJWT(payload);
+    res.setHeader("auth", newToken);
 
+    // * Continuar con la petición
     next();
   } catch (error) {
-    return res.status(401).send("Unauthorized");
+    return res.status(401).send("Not Authorized");
   }
 };
