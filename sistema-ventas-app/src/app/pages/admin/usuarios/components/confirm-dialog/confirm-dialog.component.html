@@ -1,0 +1,69 @@
+<h1
+  mat-dialog-title
+  style="
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #34495e;
+    background-color: #ecf0f1;
+    border-radius: 10px 10px 0 0;
+    padding: 15px 20px;
+  "
+>
+  Confirmación
+</h1>
+<div
+  mat-dialog-content
+  style="
+    padding: 20px;
+    font-size: 16px;
+    color: #2c3e50;
+    background-color: #f7f9f9;
+    border-radius: 0 0 10px 10px;
+  "
+>
+  <p>{{ mensaje }}</p>
+</div>
+<div
+  mat-dialog-actions
+  style="
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #f7f9f9;
+    border-radius: 0 0 10px 10px;
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr;
+  "
+>
+  <button
+    mat-flat-button
+    color="warn"
+    (click)="cerrarDialogo()"
+    style="
+      background-color: #e74c3c;
+      color: white;
+      padding: 8px 16px;
+      margin: 5px;
+      border-radius: 20px;
+      border: none;
+    "
+  >
+    No
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="confirmado()"
+    cdkFocusInitial
+    style="
+      background-color: #2ecc71;
+      color: white;
+      padding: 8px 16px;
+      margin: 5px;
+      border-radius: 20px;
+      border: none;
+    "
+  >
+    Sí
+  </button>
+</div>
