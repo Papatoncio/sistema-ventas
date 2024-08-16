@@ -3,44 +3,156 @@ import prisma from "../database/database";
 import { utils } from "../utils/utils";
 
 class IndexController {
-  public async index(req: Request, res: Response) {
+  // Obtener todos los usuarios
+  public async select(req: Request, res: Response) {
     try {
-      const user = {
-        nombre: "Juan Pablo",
-        apellidos: "Jiménez Jaime",
-        username: "jpjj123",
-        password: "linux",
-      };
+      const usuarios = await prisma.usuario.findMany({
+        include: {
+          tbl_usuario_rol: {
+            include: {
+              tbl_rol: true,
+            },
+          },
+        },
+      });
 
-      const token = utils.generateJWT(user);
-      console.log(token);
-      res.json({ message: token });
+      const resultado = usuarios.map((usuario) => ({
+        ...usuario,
+        roles: usuario.tbl_usuario_rol.map((ur) => ur.tbl_rol?.nombre),
+      }));
+
+      res.status(200).json({
+        estado: "0",
+        mensaje: "Usuarios consultados correctamente",
+        objeto: resultado,
+      });
     } catch (error: any) {
-      return res.status(500).json({ message: `Error: ${error}` });
+      return res
+        .status(400)
+        .json({ estado: "1", mensaje: `Error: ${error.message}` });
     }
   }
 
-  public insert(req: Request, res: Response) {
+  // Insertar un nuevo usuario con roles
+  public async insert(req: Request, res: Response) {
     try {
-      return res.json({ message: "Insert Works" });
+      const { nombre, apellidos, username, email, pass, roles } = req.body;
+
+      // Verificar si el usuario ya existe basado en el email
+      const existingUser = await prisma.usuario.findFirst({
+        where: {
+          email: email,
+        },
+      });
+
+      if (existingUser) {
+        return res.status(400).json({
+          estado: "1",
+          mensaje: "El usuario con ese email ya existe.",
+        });
+      }
+
+      const password: string = await utils.hashPassword(pass);
+
+      // Crear el nuevo usuario
+      const nuevoUsuario = await prisma.usuario.create({
+        data: {
+          nombre,
+          apellidos,
+          username,
+          email,
+          password,
+          tbl_usuario_rol: {
+            create: roles.map((cverol: number) => ({ cverol })),
+          },
+        },
+      });
+
+      res.status(200).json({
+        estado: "0",
+        mensaje: "Usuario creado correctamente",
+        objeto: nuevoUsuario,
+      });
     } catch (error: any) {
-      return res.status(500).json({ message: `Error: ${error}` });
+      return res
+        .status(500)
+        .json({ estado: "1", mensaje: `Error: ${error.message}` });
     }
   }
 
-  public update(req: Request, res: Response) {
+  // Actualizar un usuario existente y sus roles
+  public async update(req: Request, res: Response) {
     try {
-      return res.json({ message: "Update Works" });
+      const { id, nombre, apellidos, email, roles } = req.body;
+
+      // Verificar si el usuario existe
+      const usuarioExistente = await prisma.usuario.findUnique({
+        where: { cveusuario: parseInt(id) },
+      });
+
+      if (!usuarioExistente) {
+        return res
+          .status(404)
+          .json({ estado: "1", mensaje: "Usuario no encontrado." });
+      }
+
+      // Actualizar el usuario y sus roles
+      const usuarioActualizado = await prisma.usuario.update({
+        where: { cveusuario: parseInt(id) },
+        data: {
+          nombre,
+          apellidos,
+          email,
+          tbl_usuario_rol: {
+            deleteMany: {}, // Eliminar todos los roles existentes
+            create: roles.map((cverol: number) => ({ cverol })), // Crear nuevos roles
+          },
+        },
+      });
+
+      res.status(200).json({
+        estado: "0",
+        mensaje: "Usuario actualizado correctamente",
+        objeto: usuarioActualizado,
+      });
     } catch (error: any) {
-      return res.status(500).json({ message: `Error: ${error}` });
+      return res
+        .status(500)
+        .json({ estado: "1", mensaje: `Error: ${error.message}` });
     }
   }
 
-  public delete(req: Request, res: Response) {
+  // Eliminar un usuario
+  public async delete(req: Request, res: Response) {
     try {
-      return res.json({ message: "Delete Works" });
+      const { id } = req.body;
+
+      // Verificar si el usuario existe
+      const existingUser = await prisma.usuario.findUnique({
+        where: { cveusuario: parseInt(id) },
+      });
+
+      if (!existingUser) {
+        return res
+          .status(400)
+          .json({ estado: "1", mensaje: "Usuario no encontrado." });
+      }
+
+      await prisma.tbl_usuario_rol.deleteMany({
+        where: { cveusuario: parseInt(id) },
+      });
+
+      await prisma.usuario.delete({
+        where: { cveusuario: parseInt(id) },
+      });
+      res.status(200).json({
+        estado: "0",
+        mensaje: "Usuario eliminado correctamente",
+      });
     } catch (error: any) {
-      return res.status(500).json({ message: `Error: ${error}` });
+      return res
+        .status(400)
+        .json({ estado: "1", mensaje: `Error: ${error.message}` });
     }
   }
 }

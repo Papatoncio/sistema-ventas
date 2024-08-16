@@ -9,7 +9,7 @@ export const authRules = () => {
       .withMessage("Campo requerido")
       .isLength({ min: 3, max: 150 })
       .withMessage("Rango incorrecto"),
-    body("password*")
+    body("password")
       .trim()
       .not()
       .isEmpty()
