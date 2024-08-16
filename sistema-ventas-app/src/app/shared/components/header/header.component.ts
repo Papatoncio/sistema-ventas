@@ -33,8 +33,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authSvc.tokenData$
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
-        console.log('Data:');
-        console.log(data);
         this.data = data;
       });
   }
@@ -48,7 +46,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('Metdodo Ondestroy');
     this.destroy$.next({});
     this.destroy$.complete();
   }

@@ -74,6 +74,7 @@ export class AuthService {
     this.token.next('');
     this.tokenData.next(null);
     this.isLogged.next(false);
+    this.router.navigate(['/login']);
   }
 
   checkToken() {

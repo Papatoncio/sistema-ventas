@@ -8,6 +8,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 
 const myModules: any = [
   MatButtonModule,
@@ -19,6 +23,10 @@ const myModules: any = [
   MatInputModule,
   MatSnackBarModule,
   MatMenuModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatDialogModule,
+  MatSelectModule,
 ];
 
 @NgModule({
