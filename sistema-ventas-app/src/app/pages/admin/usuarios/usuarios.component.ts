@@ -81,8 +81,6 @@ export class UsuariosComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.getUsers();
               });
             });
-        } else {
-          alert('Operación cancelada');
         }
       });
   }
