@@ -1,12 +1,12 @@
 <mat-sidenav-container>
-    <mat-sidenav #sidenav mode="push">
-        <ol>
-            <app-sidebar></app-sidebar>
-        </ol>
-    </mat-sidenav>
-    <mat-sidenav-content>
-        <app-header (toogleSidenav)="sidenav.toggle()"></app-header>
-        <router-outlet />
-        <app-footer></app-footer>
-    </mat-sidenav-content>
+  <mat-sidenav #sidenav mode="push">
+    <ol>
+      <app-sidebar (toogleSidenav)="sidenav.toggle()"></app-sidebar>
+    </ol>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-header (toogleSidenav)="sidenav.toggle()"></app-header>
+    <router-outlet />
+    <app-footer></app-footer>
+  </mat-sidenav-content>
 </mat-sidenav-container>

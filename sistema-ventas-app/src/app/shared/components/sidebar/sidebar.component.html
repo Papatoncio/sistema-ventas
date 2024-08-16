@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">Menú</mat-toolbar>
 <mat-nav-list>
   <div *ngFor="let menu of menus">
-    <a [routerLink]="menu.route" mat-list-item>
+    <a [routerLink]="menu.route" mat-list-item (click)="onToogleSidenav()">
       <mat-icon class="me-2 align-middle">{{ menu.icon }}</mat-icon>
       <span> {{ menu.name }}</span>
     </a>
