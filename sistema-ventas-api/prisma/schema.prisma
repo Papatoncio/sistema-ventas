@@ -16,6 +16,7 @@ model Usuario {
   password        String            @db.VarChar(800)
   fecharegistro   DateTime?         @default(now()) @db.Timestamp(6)
   tbl_usuario_rol tbl_usuario_rol[]
+  tbl_venta       tbl_venta[]
 
   @@map("tbl_usuario")
 }
@@ -32,4 +33,40 @@ model tbl_usuario_rol {
   cverol        Int?
   tbl_rol       tbl_rol? @relation(fields: [cverol], references: [cverol], onDelete: NoAction, onUpdate: NoAction)
   tbl_usuario   Usuario? @relation(fields: [cveusuario], references: [cveusuario], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tbl_categoria {
+  cvecategoria Int            @id @default(autoincrement())
+  descripcion  String         @db.VarChar(250)
+  activo       Boolean
+  tbl_producto tbl_producto[]
+}
+
+model tbl_detalle_venta {
+  cvedetalleventa Int          @id @default(autoincrement())
+  cantidad        Int
+  precioproducto  Float
+  cveproducto     Int
+  cveventa        Int
+  tbl_producto    tbl_producto @relation(fields: [cveproducto], references: [cveproducto], onDelete: NoAction, onUpdate: NoAction)
+  tbl_venta       tbl_venta    @relation(fields: [cveventa], references: [cveventa], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tbl_producto {
+  cveproducto       Int                 @id @default(autoincrement())
+  descripcion       String              @db.VarChar(350)
+  precio            Float
+  cantidad          Int?
+  cvecategoria      Int
+  tbl_detalle_venta tbl_detalle_venta[]
+  tbl_categoria     tbl_categoria       @relation(fields: [cvecategoria], references: [cvecategoria], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tbl_venta {
+  cveventa          Int                 @id @default(autoincrement())
+  totalventa        Float
+  fechaventa        DateTime            @db.Timestamp(6)
+  cveusuario        Int
+  tbl_detalle_venta tbl_detalle_venta[]
+  tbl_usuario       Usuario             @relation(fields: [cveusuario], references: [cveusuario], onDelete: NoAction, onUpdate: NoAction)
 }
