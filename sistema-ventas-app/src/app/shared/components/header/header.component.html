@@ -1,0 +1,30 @@
+<mat-toolbar [class.mat-elavation-2]="true">
+  <ng-container *ngIf="isLogged">
+    <button mat-button (click)="onToogleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </ng-container>
+
+  <span><a routerLink="/home">Sistema Ventas</a></span>
+  <span class="spacer"> </span>
+  <a
+    mat-button
+    color="primary"
+    routerLink="/login"
+    *ngIf="!isLogged; else viewLogOut"
+    >Iniciar sesión</a
+  >
+  <ng-template #viewLogOut>
+    <button mat-button [matMenuTriggerFor]="lista">
+      {{ data.nombre + " " + data.apellidos }}
+      <mat-icon>expand_more</mat-icon>
+    </button>
+
+    <mat-menu #lista="matMenu">
+      <button mat-menu-item (click)="onLogOut()">
+        <mat-icon>logout</mat-icon>
+        Cerrar sesión
+      </button>
+    </mat-menu>
+  </ng-template>
+</mat-toolbar>

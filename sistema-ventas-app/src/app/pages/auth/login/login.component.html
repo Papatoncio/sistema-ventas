@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="row align-items-center justify-content-center h-100">
+    <div class="col-md-8">
+      <mat-card>
+        <mat-card-content>
+          <h3>Inicio de sesión</h3>
+          <form [formGroup]="loginForm" (ngSubmit)="onlogin()">
+            <mat-form-field class="full-width">
+              <mat-label> Usuario </mat-label>
+              <input type="text" matInput formControlName="username" />
+              <mat-error>
+                {{ baseForm.getErrorMessage(loginForm.get("username")) }}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label> Password </mat-label>
+              <input
+                [type]="hide ? 'password' : 'text'"
+                matInput
+                formControlName="password"
+              />
+              <mat-error>
+                {{ baseForm.getErrorMessage(loginForm.get("password")) }}
+              </mat-error>
+              <button
+                type="button"
+                (click)="hide = !hide"
+                mat-icon-button
+                matSuffix
+              >
+                <mat-icon>{{
+                  hide ? "visibility_off" : "visibility"
+                }}</mat-icon>
+              </button>
+            </mat-form-field>
+
+            <button
+              type="submit"
+              mat-flat-button
+              color="primary"
+              class="full-width"
+              [disabled]="loginForm.invalid"
+            >
+              Iniciar sesión
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

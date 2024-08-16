@@ -4,21 +4,22 @@ import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import swaggerDocs from "./routes/api.docs";
 import indexRoutes from "./routes/index.routes";
+import authRoutes from "./routes/auth.routes";
 
 class Server {
-  // * Crear la instancia global de nuestra app.
+  // * Crear la instancia global de nuestra app
   public app: Application;
 
-  // * Generar el constructor.
+  // * Generar el método constructor
   constructor() {
     this.app = express();
     this.config();
     this.routes();
   }
 
-  // * Generar un método para la configuración.
+  // * Generar un método para la configuración
   private config(): void {
-    // * Configuración del puerto para el server.
+    // *  Configuración para el puerto del servidor
     this.app.set("port", process.env.PORT ?? 3000);
 
     // * Mostrar las peticiones en consola
@@ -27,21 +28,22 @@ class Server {
     // * Uso de CORS (Cross Origin)
     this.app.use(cors());
 
-    // * Genera restricción a la API
+    // * Generar restricciones a la API
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
   }
 
-  // ! Generar un método para la configuración de rutas.
+  // * Generar un método para la configuración de rutas
   private routes(): void {
     this.app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
-    this.app.use("/api", indexRoutes);
+    this.app.use("/api/users", indexRoutes);
+    this.app.use("/api/oauth", authRoutes);
   }
 
-  // * Generar un método para inicializar el servicio.
+  // * Generar un método para iniciar el servicio
   start(): void {
     this.app.listen(this.app.get("port"), () => {
-      console.log("Server on port", this.app.get("port"));
+      console.log("Server on port:", this.app.get("port"));
     });
   }
 }
