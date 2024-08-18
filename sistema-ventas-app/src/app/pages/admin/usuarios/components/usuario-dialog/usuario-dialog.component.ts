@@ -49,7 +49,7 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.patchData(); // Corrección: Método renombrado de "pathData" a "patchData"
+    this.patchData();
   }
 
   patchData(): void {
@@ -67,10 +67,10 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy {
         apellidos: this.data.user.apellidos,
         username: this.data.user.username,
         email: this.data.user.email,
-        roles: roles,
+        roles: roles[0],
       });
 
-      // Desactivar los campos username, password y confirmPassword al actualizar
+      // Desactivar campos para actualización
       this.userForm.get('username')?.disable();
       this.userForm.get('password')?.disable();
       this.userForm.get('confirmPassword')?.disable();
@@ -79,7 +79,7 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy {
       this.titleButton = 'Guardar';
       this.actionTodo = Action.NEW;
 
-      // Asegurarse de que los campos estén habilitados para la creación
+      // Activar campos para inserción
       this.userForm.get('username')?.enable();
       this.userForm.get('password')?.enable();
       this.userForm.get('confirmPassword')?.enable();
@@ -102,7 +102,7 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy {
         username: formValue.username ?? '',
         email: formValue.email,
         pass: formValue.password ?? '',
-        roles: formValue.roles,
+        roles: [formValue.roles],
       };
 
       console.log(data);
@@ -135,5 +135,9 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy {
           });
       }
     }
+  }
+
+  clearForm() {
+    this.userForm.reset();
   }
 }

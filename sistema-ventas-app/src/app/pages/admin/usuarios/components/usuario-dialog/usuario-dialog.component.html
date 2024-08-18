@@ -35,7 +35,7 @@
 
     <mat-form-field class="full-width">
       <mat-label>Rol</mat-label>
-      <mat-select formControlName="roles" multiple>
+      <mat-select formControlName="roles">
         <mat-option *ngFor="let rol of roles" [value]="rol.value">
           {{ rol.viewValue }}
         </mat-option>
@@ -66,5 +66,6 @@
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cerrar</button>
+  <button mat-button (click)="clearForm()">Limpiar</button>
   <button mat-button (click)="sendForm()">{{ titleButton }}</button>
 </mat-dialog-actions>

@@ -19,43 +19,57 @@ export class UserService {
   ) {}
 
   getUsers() {
-    return this.http.get(`${this.BASE_URL}`).pipe(
-      map((data: any) => {
-        return data.objeto;
-      }),
+    return this.http
+      .get(`${this.BASE_URL}`, { headers: { requireToken: 'true' } })
+      .pipe(
+        map((data: any) => {
+          return data.objeto;
+        }),
 
-      catchError((error) => this.handlerError(error.mensaje))
-    );
+        catchError((error) => this.handlerError(error.mensaje))
+      );
   }
 
   insertUser(data: any) {
-    return this.http.post(`${this.BASE_URL}/insert`, data).pipe(
-      map((data: any) => {
-        return data.mensaje;
-      }),
+    return this.http
+      .post(`${this.BASE_URL}/insert`, data, {
+        headers: { requireToken: 'true' },
+      })
+      .pipe(
+        map((data: any) => {
+          return data.mensaje;
+        }),
 
-      catchError((error) => this.handlerError(error.mensaje))
-    );
+        catchError((error) => this.handlerError(error.mensaje))
+      );
   }
 
   updateUser(data: any) {
-    return this.http.post(`${this.BASE_URL}/update`, data).pipe(
-      map((data: any) => {
-        return data.mensaje;
-      }),
+    return this.http
+      .post(`${this.BASE_URL}/update`, data, {
+        headers: { requireToken: 'true' },
+      })
+      .pipe(
+        map((data: any) => {
+          return data.mensaje;
+        }),
 
-      catchError((error) => this.handlerError(error.mensaje))
-    );
+        catchError((error) => this.handlerError(error.mensaje))
+      );
   }
 
   deleteUser(data: any) {
-    return this.http.post(`${this.BASE_URL}/delete`, data).pipe(
-      map((data: any) => {
-        return data.mensaje;
-      }),
+    return this.http
+      .post(`${this.BASE_URL}/delete`, data, {
+        headers: { requireToken: 'true' },
+      })
+      .pipe(
+        map((data: any) => {
+          return data.mensaje;
+        }),
 
-      catchError((error) => this.handlerError(error.mensaje))
-    );
+        catchError((error) => this.handlerError(error.mensaje))
+      );
   }
 
   private handlerError(error: any) {

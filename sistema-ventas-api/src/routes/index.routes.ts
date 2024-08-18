@@ -2,6 +2,7 @@ import { Router } from "express";
 import { indexController } from "../controllers/index.controller";
 import { validate } from "../middlewares/validator.check";
 import { insertRules, updateRules } from "../rules/index.rules";
+import { jwtCheck } from "../middlewares/jwt.check";
 
 class IndexRoutes {
   public router: Router;
@@ -93,7 +94,7 @@ class IndexRoutes {
      *          200:
      *              description: Exitoso
      */
-    this.router.get("/", indexController.select);
+    this.router.get("/", jwtCheck, indexController.select);
 
     /**
      * @swagger
