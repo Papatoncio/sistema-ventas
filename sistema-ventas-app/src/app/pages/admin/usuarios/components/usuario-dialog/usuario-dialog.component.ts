@@ -2,10 +2,11 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BaseForm } from '../../../../../shared/utils/base-form';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { CustomValidator } from '../../../../../shared/utils/custom-validator';
 import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
+import { Rol } from '../../../../../shared/models/rol.interface';
 
 enum Action {
   EDIT = 'edit',
@@ -21,11 +22,7 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>(); // Corrección: Renombrado a "destroy$" para mayor claridad y tipo más específico
   titleButton = 'Guardar';
   actionTodo = Action.NEW;
-  roles = [
-    { value: 1, viewValue: 'Administrador' },
-    { value: 2, viewValue: 'Reportes' },
-    { value: 3, viewValue: 'Ventas' },
-  ];
+  roles: Rol[] = [];
 
   userForm = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(3)]],
@@ -49,7 +46,14 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.patchData();
+    this.userService
+      .getRoles()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any[]) => {
+        console.log(res);
+        this.roles = res;
+        this.patchData();
+      });
   }
 
   patchData(): void {
@@ -58,8 +62,10 @@ export class UsuarioDialogComponent implements OnInit, OnDestroy {
       this.titleButton = 'Actualizar';
       this.actionTodo = Action.EDIT;
 
+      console.log(this.data.user);
+
       const roles = this.data.user.roles.map((rol: string) => {
-        return this.roles.find((r) => r.viewValue === rol)?.value;
+        return this.roles.find((r) => r.nombre === rol)?.cverol;
       });
 
       this.userForm.patchValue({

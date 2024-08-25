@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { catchError, map, throwError } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
 
 @Injectable({
@@ -70,6 +70,14 @@ export class UserService {
 
         catchError((error) => this.handlerError(error.mensaje))
       );
+  }
+
+  getRoles(): Observable<any[]> {
+    return this.http
+      .get<any[]>(`${environment.API_URL}/api/rol/getRolesUso`, {
+        headers: { requireToken: 'true' },
+      })
+      .pipe(catchError((error) => this.handlerError(error)));
   }
 
   private handlerError(error: any) {

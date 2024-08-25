@@ -94,7 +94,7 @@ class IndexRoutes {
      *          200:
      *              description: Exitoso
      */
-    this.router.get("/", jwtCheck, indexController.select);
+    this.router.get("/", indexController.select);
 
     /**
      * @swagger

@@ -26,7 +26,7 @@ class Utils {
    * @returns object
    */
   public getPayload(token: string): any {
-    var payload = <any>jwt.verify(token, keys.secret.jwt);
+    const payload = <any>jwt.verify(token, keys.secret.jwt);
     const { iat, exp, ...data } = payload;
 
     return data;

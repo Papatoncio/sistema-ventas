@@ -6,6 +6,10 @@ class IndexController {
   // Obtener todos los usuarios
   public async select(req: Request, res: Response) {
     try {
+      const token = <string>req.headers["auth"];
+
+      const currentUser = utils.getPayload(token);
+
       const usuarios = await prisma.usuario.findMany({
         include: {
           tbl_usuario_rol: {
@@ -14,6 +18,10 @@ class IndexController {
             },
           },
         },
+        where: {
+          cveusuario: { not: currentUser.cveusuario },
+        },
+        orderBy: { cveusuario: "asc" },
       });
 
       const resultado = usuarios.map((usuario) => ({

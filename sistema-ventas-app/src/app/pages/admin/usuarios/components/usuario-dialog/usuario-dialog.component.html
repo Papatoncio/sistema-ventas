@@ -36,8 +36,8 @@
     <mat-form-field class="full-width">
       <mat-label>Rol</mat-label>
       <mat-select formControlName="roles">
-        <mat-option *ngFor="let rol of roles" [value]="rol.value">
-          {{ rol.viewValue }}
+        <mat-option *ngFor="let rol of roles" [value]="rol.cverol">
+          {{ rol.nombre }}
         </mat-option>
       </mat-select>
       <mat-error>
